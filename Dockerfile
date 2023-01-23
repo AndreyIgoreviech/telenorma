@@ -9,4 +9,6 @@ COPY ./configs/vhost.conf /etc/apache2/sites-enabled/site.conf
 # Config php
 COPY ./configs/extra-php.ini /usr/local/etc/php/conf.d/extra-php.ini
 
+RUN a2enmod rewrite
+
 RUN service apache2 restart

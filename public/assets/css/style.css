@@ -1,0 +1,20 @@
+html {
+    height: 100%;
+    font-size: 16px;
+}
+
+body {
+    min-height: 100%;
+}
+
+main {
+    padding: 2rem 0;
+}
+
+.table__width-auto {
+    width: auto;
+}
+
+.table__width-33 {
+    width: 33.33%;
+}
