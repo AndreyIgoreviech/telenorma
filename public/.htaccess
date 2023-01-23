@@ -1,6 +1,10 @@
 #Initialize mod_rewrite
 RewriteEngine On
 
+# Removes .php extensions in the end of path
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+
 # DISABLE CACHING
 <IfModule mod_headers.c>
     Header set Cache-Control "no-cache, no-store, must-revalidate"
