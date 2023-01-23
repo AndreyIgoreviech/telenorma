@@ -34,7 +34,7 @@ services:
     ports:
       - 1112:80
     environment:
-      PMA_HOST: start_app_db
+      PMA_HOST: telenorma_db
       MYSQL_USERNAME: ${MYSQL_USER}
       MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
       UPLOAD_LIMIT: 300000K
