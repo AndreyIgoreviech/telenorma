@@ -1,0 +1,42 @@
+version: '3.3'
+
+services:
+  telenorma_db:
+    platform: linux/x86_64
+    image: mysql:5
+    container_name: telenorma_db
+    restart: always
+    ports:
+      - 1110:3306
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DB}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    volumes:
+      - ./db_init:/docker-entrypoint-initdb.d
+
+  telenorma_php:
+    build: ./
+    container_name: telenorma_php
+    restart: always
+    ports:
+      - 1111:80
+    volumes:
+      - ./public:/var/www/html
+    depends_on:
+      - telenorma_db
+
+  telenorma_phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: telenorma_phpmyadmin
+    restart: always
+    ports:
+      - 1112:80
+    environment:
+      PMA_HOST: start_app_db
+      MYSQL_USERNAME: ${MYSQL_USER}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      UPLOAD_LIMIT: 300000K
+    depends_on:
+      - telenorma_db
