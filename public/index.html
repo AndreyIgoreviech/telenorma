@@ -20,19 +20,19 @@
 		<!-- form start -->
 		<div class="row justify-content-center">
 			<div class="col-12 col-md-9 col-lg-8 col-xl-7 col-xxl-6">
-				<form>
+				<form novalidate>
 					<div class="mb-3">
 						<label for="inputFirstname" class="form-label">First Name</label>
-						<input type="email" name="firstname" class="form-control" id="inputFirstname">
+						<input type="text" name="firstname" class="form-control" id="inputFirstname" required>
 					</div>
 					<div class="mb-3">
 						<label for="inputLastname" class="form-label">Last Name</label>
-						<input type="text" name="lastname" class="form-control" id="inputLastname">
+						<input type="text" name="lastname" class="form-control" id="inputLastname" required>
 					</div>
 					<div class="mb-3">
 						<label for="selectRole" class="form-label">Check me out</label>
-						<select name="role" class="form-select" id="selectRole">
-							<option selected>Select role</option>
+						<select name="roleId" class="form-select" id="selectRole" required>
+							<option selected disabled value="">Select role</option>
 						</select>
 					</div>
 					<div class="row justify-content-end">
@@ -40,7 +40,7 @@
 							<button type="submit" class="btn btn-primary d-none">Update user</button>
 						</div>
 						<div class="col-auto">
-							<button type="submit" class="btn btn-success">Add user</button>
+							<button type="button" class="btn btn-success" onclick="addUser(event)">Add user</button>
 						</div>
 					</div>
 				</form>
@@ -54,33 +54,18 @@
 				<table class="table table-striped table-hover align-middle">
 					<thead>
 					<tr>
-						<th>#</th>
+						<th>ID</th>
 						<th>First Name</th>
 						<th>Last Name</th>
 						<th>Role</th>
+						<th>Created</th>
+						<th>Updated</th>
 						<th></th>
 					</tr>
 					</thead>
 					<tbody class="table-group-divider">
 					<tr>
-						<th class="table__width-auto">1</th>
-						<td class="table__width-33">Mark</td>
-						<td class="table__width-33">Otto</td>
-						<td class="table__width-33">@mdo</td>
-						<td class="table__width-auto">
-							<div class="row flex-nowrap">
-								<div class="col-auto">
-									<button class="btn btn-sm btn-primary">
-										<i class="bi-pencil"></i>
-									</button>
-								</div>
-								<div class="col-auto">
-									<button class="btn btn-sm btn-danger">
-										<i class="bi-trash"></i>
-									</button>
-								</div>
-							</div>
-						</td>
+						<td colspan="7" class="text-center">Loading ...</td>
 					</tr>
 					</tbody>
 				</table>
@@ -89,6 +74,33 @@
 		<!-- table end -->
 	</div>
 </main>
+
+<!-- Templates for javascript rendering start -->
+<template id="user-table-row">
+	<tr>
+		<th class="table__width-auto">{id}</th>
+		<td class="table__width-20">{firstname}</td>
+		<td class="table__width-20">{lastname}</td>
+		<td class="table__width-20">{role}</td>
+		<td class="table__width-20">{created}</td>
+		<td class="table__width-20">{updated}</td>
+		<td class="table__width-auto">
+			<div class="row flex-nowrap">
+				<div class="col-auto">
+					<button type="button" class="btn btn-sm btn-primary" onclick="editUser({id})">
+						<i class="bi-pencil"></i>
+					</button>
+				</div>
+				<div class="col-auto">
+					<button type="button" class="btn btn-sm btn-danger" onclick="deleteUser({id})">
+						<i class="bi-trash"></i>
+					</button>
+				</div>
+			</div>
+		</td>
+	</tr>
+</template>
+<!-- *** -->
 
 <!-- Include all JavaScript libraries -->
 <script src="node_modules/jquery/dist/jquery.min.js"></script>
