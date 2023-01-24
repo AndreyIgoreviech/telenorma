@@ -61,6 +61,14 @@ const removeRow = (id) => {
     $('table tbody tr#user-id-' + id).remove();
 }
 
+const updateRow = (user) => {
+    const row = $('table tbody tr#user-id-' + user.id);
+    row.find('td').eq(0).text(user.firstname);
+    row.find('td').eq(1).text(user.lastname);
+    row.find('td').eq(2).text(user.role);
+    row.find('td').eq(4).text(user.updated);
+}
+
 const addUser = (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -71,34 +79,30 @@ const addUser = (event) => {
         const roleId = form.find('[name="roleId"]').val();
         if (firstname && lastname && roleId) {
             isAjaxLoading = true;
-            createUser(firstname, lastname, roleId)
-                .then((user) => {
-                    isAjaxLoading = false;
+            $.ajax({
+                url: base_path_rest_api + 'users',
+                method: 'PUT',
+                dataType: "json",
+                data: {
+                    firstname,
+                    lastname,
+                    roleId
+                },
+                success: (user) => {
                     if (user) {
                         form.removeClass('was-validated').trigger('reset');
                         addRow(user);
                     }
-                })
-                .catch(() => {
                     isAjaxLoading = false;
-                });
+                },
+                error: (err) => {
+                    exception(err);
+                    isAjaxLoading = false;
+                }
+            });
         }
         form.addClass('was-validated');
     }
-}
-
-const createUser = (firstname, lastname, roleId) => {
-    return $.ajax({
-        url: base_path_rest_api + 'users',
-        method: 'PUT',
-        dataType: "json",
-        data: {
-            firstname,
-            lastname,
-            roleId
-        },
-        error: (err) => exception(err)
-    });
 }
 
 const deleteUser = (id) => {
@@ -122,5 +126,75 @@ const deleteUser = (id) => {
                 }
             });
         }
+    }
+}
+
+const editUser = (id) => {
+    if (id && !isAjaxLoading) {
+        isAjaxLoading = true;
+        return $.ajax({
+            url: base_path_rest_api + 'users',
+            method: 'GET',
+            dataType: "json",
+            data: {
+                id
+            },
+            success: (user) => {
+                if (user) {
+                    const form = $('form');
+                    form.find('[name="id"]').val(id);
+                    form.find('[name="firstname"]').val(user.firstname);
+                    form.find('[name="lastname"]').val(user.lastname);
+                    form.find('[name="roleId"]').val(user.roleId);
+                    $('#button-update').removeClass('d-none');
+                    $('#button-add').addClass('d-none');
+                }
+                isAjaxLoading = false;
+            },
+            error: (err) => {
+                exception(err);
+                isAjaxLoading = false;
+            }
+        });
+    }
+}
+
+const updateUser = () => {
+    event.preventDefault();
+    event.stopPropagation();
+    if (!isAjaxLoading) {
+        const form = $('form');
+        const id = form.find('[name="id"]').val();
+        const firstname = form.find('[name="firstname"]').val().trim();
+        const lastname = form.find('[name="lastname"]').val().trim();
+        const roleId = form.find('[name="roleId"]').val();
+        if (firstname && lastname && roleId) {
+            isAjaxLoading = true;
+            $.ajax({
+                url: base_path_rest_api + 'users',
+                method: 'POST',
+                dataType: "json",
+                data: {
+                    id,
+                    firstname,
+                    lastname,
+                    roleId
+                },
+                success: (user) => {
+                    if (user) {
+                        $('#button-update').addClass('d-none');
+                        $('#button-add').removeClass('d-none');
+                        form.removeClass('was-validated').trigger('reset');
+                        updateRow(user);
+                    }
+                    isAjaxLoading = false;
+                },
+                error: (err) => {
+                    exception(err);
+                    isAjaxLoading = false;
+                }
+            });
+        }
+        form.addClass('was-validated');
     }
 }

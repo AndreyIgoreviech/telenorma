@@ -98,19 +98,12 @@ class Users
     // UPDATE
     public function updateUser()
     {
-        $sqlQuery = "UPDATE
-                        " . $this->db_table . "
-                    SET
-                        firstname = :firstname,
-                        lastname = :lastname, 
-                        roleId = :roleId, 
-                        updated = :updated
-                    WHERE 
-                        id = :id";
-
+        $sqlQuery = "UPDATE `users` 
+                    SET firstname = :firstname, lastname = :lastname, roleId = :roleId
+                    WHERE id = :id";
         $stmt = $this->connection->prepare($sqlQuery);
 
-        $this->id = htmlspecialchars(strip_tags($this->id));
+        $this->id = intval($this->id);
         $this->firstname = htmlspecialchars(strip_tags($this->firstname));
         $this->lastname = htmlspecialchars(strip_tags($this->lastname));
         $this->roleId = htmlspecialchars(strip_tags($this->roleId));
@@ -119,9 +112,11 @@ class Users
         $stmt->bindParam(":firstname", $this->firstname);
         $stmt->bindParam(":lastname", $this->lastname);
         $stmt->bindParam(":roleId", $this->roleId);
+        $stmt->bindParam(":id", $this->id);
 
         if ($stmt->execute()) {
-            return true;
+            $this->getUser();
+            return $this;
         }
         return false;
     }

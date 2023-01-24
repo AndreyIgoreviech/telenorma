@@ -72,6 +72,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     die();
 }
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $database = new Database();
+    $db = $database->getConnection();
+    $user = new Users($db);
+
+    parse_str(file_get_contents("php://input"), $data);
+    $user->id = $data['id'] ?? null;
+    $user->firstname = $data['firstname'] ?? null;
+    $user->lastname = $data['lastname'] ?? null;
+    $user->roleId = $data['roleId'] ?? null;
+
+    echo json_encode($user->updateUser());
+
+    die();
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     $database = new Database();
     $db = $database->getConnection();

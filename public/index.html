@@ -36,10 +36,11 @@
 						</select>
 					</div>
 					<div class="row justify-content-end">
-						<div class="col-auto">
-							<button type="submit" class="btn btn-primary d-none">Update user</button>
+						<div class="col-auto d-none" id="button-update">
+							<input type="hidden" name="id">
+							<button type="button" class="btn btn-primary" onclick="updateUser(event)">Update user</button>
 						</div>
-						<div class="col-auto">
+						<div class="col-auto" id="button-add">
 							<button type="button" class="btn btn-success" onclick="addUser(event)">Add user</button>
 						</div>
 					</div>
