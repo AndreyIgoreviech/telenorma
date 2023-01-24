@@ -21,7 +21,7 @@ const initRoles = () => {
 
 const exception = (errorObj = null) => {
     if (errorObj) {
-        console.error(errorObj);
+        console.error(errorObj.status + ": " + errorObj.responseJSON.message);
     } else {
         console.error('There was some error performing the AJAX call!');
     }
