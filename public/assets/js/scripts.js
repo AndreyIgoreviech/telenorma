@@ -4,7 +4,7 @@ let isAjaxLoading = false;
 $(window).on('load', function () {
     initRoles();
 
-    let users = loadUsers()
+    loadUsers()
         .then((users) => {
             $('table tbody').html('');
             if (users.length) {
@@ -102,14 +102,25 @@ const createUser = (firstname, lastname, roleId) => {
 }
 
 const deleteUser = (id) => {
-    return $.ajax({
-        url: base_path_rest_api + 'users',
-        method: 'DELETE',
-        dataType: "json",
-        data: {
-            id
-        },
-        success: (userId) => removeRow(userId),
-        error: (err) => exception(err)
-    });
+    if (!isAjaxLoading) {
+        if (confirm("Are you sure?") === true) {
+            isAjaxLoading = true;
+            $.ajax({
+                url: base_path_rest_api + 'users',
+                method: 'DELETE',
+                dataType: "json",
+                data: {
+                    id
+                },
+                success: (userId) => {
+                    removeRow(userId);
+                    isAjaxLoading = false;
+                },
+                error: (err) => {
+                    exception(err);
+                    isAjaxLoading = false;
+                }
+            });
+        }
+    }
 }
