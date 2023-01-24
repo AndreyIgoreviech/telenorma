@@ -1,9 +1,7 @@
 <?php
-header("Access-Control-Allow-Origin: *");
-header("Content-Type: application/json; charset=UTF-8");
-
+require_once("headers.php");
 require_once("database.php");
-require_once("../classes/roles.php");
+require_once("classes/roles.php");
 
 // Connection to DB
 $database = new Database();
