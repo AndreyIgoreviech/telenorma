@@ -10,17 +10,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $db = $database->getConnection();
 
     if (isset($_GET['id'])) {
-        if($id = intval($_GET['id'])) {
+        if ($id = intval($_GET['id'])) {
             $user = new Users($db);
             $user->id = $id;
             $user->getUser();
-            echo json_encode($user);
+            if ($user->id) {
+                echo json_encode($user);
+            } else {
+                echo json_encode(false);
+            }
         } else {
             http_response_code(400);
             echo json_encode(
-                array("message" => "Wrong param ID: '" . $_GET['id'] ."'")
+                array("message" => "Wrong param ID: '" . $_GET['id'] . "'")
             );
-            die();
         }
     } else {
         $items = new Users($db);
@@ -52,8 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     }
 
     die();
-} else {
-    $isResponseError = true;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
@@ -69,13 +70,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     echo json_encode($user->createUser());
 
     die();
-} else {
-    $isResponseError = true;
 }
 
-if ($isResponseError) {
-    http_response_code(405);
-    echo json_encode(
-        array("message" => "Method " . $_SERVER['REQUEST_METHOD'] . " not allowed")
-    );
+if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+    $database = new Database();
+    $db = $database->getConnection();
+
+    parse_str(file_get_contents("php://input"), $data);
+    $id = intval($data['id']);
+
+    if ($id) {
+        $user = new Users($db);
+        $user->id = $id;
+        if ($user->deleteUser()) {
+            echo json_encode($id);
+        } else {
+            echo json_encode(0);
+        }
+    } else {
+        http_response_code(404);
+        echo json_encode(
+            array("message" => "User with this  found")
+        );
+    }
+
+    die();
 }
+
+http_response_code(405);
+echo json_encode(
+    array("message" => "Method " . $_SERVER['REQUEST_METHOD'] . " not allowed")
+);

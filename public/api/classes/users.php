@@ -58,9 +58,14 @@ class Users
         $stmt->bindParam(":roleId", $this->roleId);
 
         if ($stmt->execute()) {
-            $this->id = $this->connection->lastInsertId();
-            $this->getUser();
-            return $this;
+            $lastId = $this->connection->lastInsertId();
+            if ($lastId) {
+                $this->id = $lastId;
+                $this->getUser();
+                return $this;
+            } else {
+                return false;
+            }
         }
         return false;
     }
@@ -77,13 +82,17 @@ class Users
         $stmt->execute();
         $dataRow = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $this->id = intval($dataRow['id']);
-        $this->firstname = $dataRow['firstname'];
-        $this->lastname = $dataRow['lastname'];
-        $this->roleId = $dataRow['roleId'];
-        $this->role = $dataRow['role'];
-        $this->created = $dataRow['created'];
-        $this->updated = $dataRow['updated'];
+        if ($dataRow) {
+            $this->id = intval($dataRow['id']);
+            $this->firstname = $dataRow['firstname'];
+            $this->lastname = $dataRow['lastname'];
+            $this->roleId = $dataRow['roleId'];
+            $this->role = $dataRow['role'];
+            $this->created = $dataRow['created'];
+            $this->updated = $dataRow['updated'];
+        } else {
+            $this->id = null;
+        }
     }
 
     // UPDATE

@@ -48,13 +48,17 @@ const loadUsers = () => {
 
 const addRow = (user) => {
     let template = $("template#user-table-row").html().toString();
-    template = template.replace('{id}', user.id);
+    template = template.replace(/\{id\}/g, user.id);
     template = template.replace('{firstname}', user.firstname);
     template = template.replace('{lastname}', user.lastname);
     template = template.replace('{role}', user.role);
     template = template.replace('{created}', user.created);
     template = template.replace('{updated}', user.updated);
     $('table tbody').append(template);
+}
+
+const removeRow = (id) => {
+    $('table tbody tr#user-id-' + id).remove();
 }
 
 const addUser = (event) => {
@@ -103,8 +107,9 @@ const deleteUser = (id) => {
         method: 'DELETE',
         dataType: "json",
         data: {
-            id: id
+            id
         },
+        success: (userId) => removeRow(userId),
         error: (err) => exception(err)
     });
 }
