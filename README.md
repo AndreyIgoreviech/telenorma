@@ -52,6 +52,8 @@ Demo how it's works:
 
 ### Tables:
 
+[Dump file](demo/telenorma.sql)
+
 **goods**
 
 <img src="demo/table-goods.png" width="300px">
