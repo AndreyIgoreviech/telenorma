@@ -34,9 +34,9 @@ POST: /api/roles           (get all roles)
 After when you will see this rows in Terminal:
 ```commandline
 [+] Running 3/0
- ⠿ Container telenorma_db          Running                                                                                                                                                                                                                                                                         0.0s
- ⠿ Container telenorma_phpmyadmin  Running                                                                                                                                                                                                                                                                         0.0s
- ⠿ Container telenorma_php         Running 
+ ⠿ Container telenorma_db          Running
+ ⠿ Container telenorma_phpmyadmin  Running
+ ⠿ Container telenorma_php         Running
 ```
 5. Go to browser and visit this address: `http://localhost:1111`
 
@@ -86,7 +86,7 @@ WHERE goods.id = 1;
 
 include file with connection code [database.php](public/api/database.php)
 
-```injectablephp
+```php
 <?php
 require_once("database.php");
 
@@ -107,7 +107,7 @@ $stmt = $db->prepare($sqlQuery);
 $stmt->execute();
 $dataRow = $stmt->fetch(PDO::FETCH_ASSOC);
 ```
-Same code on #74 row in file [users.php](public/api/classes/users.php)
+Same code on #74 row in file [users.php](public/api/classes/users.php#L74)
 
 Demo:
 
